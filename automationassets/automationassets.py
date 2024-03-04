@@ -1,5 +1,5 @@
 """ Azure Automation assets module to be used with Azure Automation during offline development """
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # ----------------------------------------------------------------------------------
 #
 # MIT License
