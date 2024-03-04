@@ -47,8 +47,8 @@ def _get_automation_asset_file():
 # Helper function to find an asset of a specific type and name in the asset file
 def _get_asset_value(asset_file, asset_type, asset_name):
     import json
-    json_data = open(asset_file)
-    json_string = json_data.read()
+    with open(asset_file, encoding="utf-8") as json_data:
+        json_string = json_data.read()
     local_assets = json.loads(json_string)
 
     return_value = None
@@ -78,8 +78,8 @@ def _get_asset(asset_type, asset_name):
 # Helper function to set an asset of a specific type and name in the assetFile
 def _set_asset_value(asset_file, asset_type, asset_name, asset_value):
     import json
-    json_data = open(asset_file)
-    json_string = json_data.read()
+    with open(asset_file, encoding="utf-8") as json_data:
+        json_string = json_data.read()
     local_assets = json.loads(json_string)
     item_found = False
 
@@ -88,7 +88,7 @@ def _set_asset_value(asset_file, asset_type, asset_name, asset_value):
             for value in asset_values:
                 if value[_KEY_NAME] == asset_name:
                     value[_KEY_VALUE] = asset_value
-                    with open(asset_file, 'w') as asset_file_content:
+                    with open(asset_file, 'w', encoding="utf-8") as asset_file_content:
                         asset_file_content.write(json.dumps(local_assets, indent=4))
                         item_found = True
                         break
@@ -142,6 +142,7 @@ def get_automation_certificate(name):
     """ Returns an automation certificate in PKCS12 bytes """
     from OpenSSL import crypto
     certificate = _get_asset(_KEY_CERTIFICATE, name)
-    pks12_cert = crypto.load_pkcs12(open(certificate[_KEY_CERTPATH], 'rb').read(),
-                                    certificate[_KEY_PASSWORD])
+    with open(certificate[_KEY_CERTPATH], 'rb') as certificate_data:
+        pks12_cert = crypto.load_pkcs12(certificate_data.read(),
+                                        certificate[_KEY_PASSWORD])
     return crypto.PKCS12.export(pks12_cert)
