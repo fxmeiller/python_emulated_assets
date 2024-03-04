@@ -58,7 +58,7 @@ def _get_asset_value(asset_file, asset_type, asset_name):
                 if value[_KEY_NAME] == asset_name:
                     return_value = value
                     break
-        if return_value != None:
+        if return_value is not None:
             # Found the value so break out of loop
             break
 
